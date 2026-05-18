@@ -26,6 +26,10 @@ const TIME_SLOTS = [
   "12:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
 ];
 
+// Input class shared across all form fields — font-size 16px prevents iOS zoom
+const inputClass =
+  "w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all min-h-[52px]";
+
 type Step = 1 | 2 | 3 | 4;
 
 interface BookingData {
@@ -65,12 +69,15 @@ export default function ReservarPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-28 pb-16 px-6">
+      <main
+        className="min-h-screen min-h-[100dvh] pt-24 sm:pt-28 pb-10 sm:pb-16 px-4 sm:px-6"
+        style={{ paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))" }}
+      >
         <div className="max-w-2xl mx-auto">
-          {/* Back link */}
+          {/* Back link — large touch target */}
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-blue-600 mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-slate-500 active:text-blue-600 mb-6 sm:mb-8 transition-colors min-h-[44px]"
           >
             <ArrowLeft className="w-4 h-4" />
             Volver al inicio
@@ -127,16 +134,16 @@ export default function ReservarPage() {
               <p className="text-slate-500 dark:text-slate-400 mb-8">
                 Selecciona el tipo de lavado que deseas.
               </p>
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                 {SERVICES.map((svc) => (
                   <button
                     key={svc.id}
                     onClick={() => updateBooking("service", svc.id)}
                     className={cn(
-                      "text-left p-5 rounded-2xl border-2 transition-all",
+                      "text-left p-4 sm:p-5 rounded-2xl border-2 transition-all min-h-[80px] active:scale-[0.98]",
                       booking.service === svc.id
                         ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                        : "border-slate-200 dark:border-slate-700 hover:border-blue-300 bg-white dark:bg-slate-800"
+                        : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800"
                     )}
                   >
                     <div className="flex items-start justify-between">
@@ -167,7 +174,7 @@ export default function ReservarPage() {
               <button
                 disabled={!booking.service}
                 onClick={() => setStep(2)}
-                className="mt-8 w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-xl hover:shadow-blue-500/25 hover:scale-[1.02] transition-all"
+                className="mt-6 sm:mt-8 w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed active:opacity-90 transition-all min-h-[56px] text-base"
               >
                 Continuar →
               </button>
@@ -193,7 +200,7 @@ export default function ReservarPage() {
                   min={minDate}
                   value={booking.date}
                   onChange={(e) => updateBooking("date", e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                  className={inputClass}
                 />
               </div>
 
@@ -201,16 +208,16 @@ export default function ReservarPage() {
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3">
                   Hora
                 </label>
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {TIME_SLOTS.map((slot) => (
                     <button
                       key={slot}
                       onClick={() => updateBooking("time", slot)}
                       className={cn(
-                        "py-2.5 px-3 text-sm font-medium rounded-xl border transition-all",
+                        "py-3 px-2 text-sm font-medium rounded-xl border transition-all min-h-[48px] active:scale-95",
                         booking.time === slot
                           ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-400"
+                          : "bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300"
                       )}
                     >
                       {slot}
@@ -222,14 +229,14 @@ export default function ReservarPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep(1)}
-                  className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-2xl hover:bg-slate-200 transition-all"
+                  className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-2xl active:bg-slate-200 transition-all min-h-[56px]"
                 >
                   ← Atrás
                 </button>
                 <button
                   disabled={!booking.date || !booking.time}
                   onClick={() => setStep(3)}
-                  className="flex-[2] py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-xl hover:shadow-blue-500/25 transition-all"
+                  className="flex-[2] py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed active:opacity-90 transition-all min-h-[56px] text-base"
                 >
                   Continuar →
                 </button>
@@ -250,9 +257,9 @@ export default function ReservarPage() {
               <div className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   {[
-                    { field: "name" as const, label: "Nombre completo", placeholder: "Juan García", type: "text" },
-                    { field: "phone" as const, label: "Teléfono / WhatsApp", placeholder: "+57 300 000 0000", type: "tel" },
-                  ].map(({ field, label, placeholder, type }) => (
+                    { field: "name" as const, label: "Nombre completo", placeholder: "Juan García", type: "text", autoComplete: "name" },
+                    { field: "phone" as const, label: "Teléfono / WhatsApp", placeholder: "+57 300 000 0000", type: "tel", autoComplete: "tel" },
+                  ].map(({ field, label, placeholder, type, autoComplete }) => (
                     <div key={field}>
                       <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
                         {label}
@@ -260,9 +267,10 @@ export default function ReservarPage() {
                       <input
                         type={type}
                         placeholder={placeholder}
+                        autoComplete={autoComplete}
                         value={booking[field]}
                         onChange={(e) => updateBooking(field, e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                        className={inputClass}
                       />
                     </div>
                   ))}
@@ -275,9 +283,11 @@ export default function ReservarPage() {
                   <input
                     type="email"
                     placeholder="juan@ejemplo.com"
+                    autoComplete="email"
+                    inputMode="email"
                     value={booking.email}
                     onChange={(e) => updateBooking("email", e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                    className={inputClass}
                   />
                 </div>
 
@@ -288,9 +298,10 @@ export default function ReservarPage() {
                   <input
                     type="text"
                     placeholder="Toyota Corolla 2021"
+                    autoComplete="off"
                     value={booking.vehicle}
                     onChange={(e) => updateBooking("vehicle", e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                    className={inputClass}
                   />
                 </div>
 
@@ -304,7 +315,8 @@ export default function ReservarPage() {
                     placeholder="Alguna indicación especial..."
                     value={booking.notes}
                     onChange={(e) => updateBooking("notes", e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all resize-none"
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all resize-none"
+                    style={{ fontSize: "16px" }}
                   />
                 </div>
               </div>
@@ -333,14 +345,14 @@ export default function ReservarPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setStep(2)}
-                  className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-2xl hover:bg-slate-200 transition-all"
+                  className="flex-1 py-4 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold rounded-2xl active:bg-slate-200 transition-all min-h-[56px]"
                 >
                   ← Atrás
                 </button>
                 <button
                   disabled={!booking.name || !booking.phone || !booking.email || !booking.vehicle}
                   onClick={() => setStep(4)}
-                  className="flex-[2] py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-xl hover:shadow-blue-500/25 transition-all"
+                  className="flex-[2] py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed active:opacity-90 transition-all min-h-[56px] text-base"
                 >
                   Confirmar Reserva ✓
                 </button>

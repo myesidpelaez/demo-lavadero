@@ -77,14 +77,14 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8 md:items-start">
           {PLANS.map((plan) => (
             <div
               key={plan.name}
               className={cn(
-                "relative rounded-3xl p-8 transition-all duration-300",
+                "relative rounded-3xl p-6 sm:p-8 transition-all duration-300",
                 plan.popular
-                  ? "bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-2xl shadow-blue-500/30 scale-105"
+                  ? "bg-gradient-to-br from-blue-600 to-cyan-500 text-white shadow-2xl shadow-blue-500/30 md:scale-105 md:-translate-y-2"
                   : "bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-300 hover:shadow-xl"
               )}
             >
@@ -166,10 +166,10 @@ export default function Pricing() {
               <Link
                 href="/reservar"
                 className={cn(
-                  "block text-center py-3 px-6 rounded-xl font-bold text-sm transition-all duration-200",
+                  "block text-center py-3.5 px-6 rounded-xl font-bold text-sm transition-all duration-200 min-h-[48px] flex items-center justify-center",
                   plan.popular
-                    ? "bg-white text-blue-600 hover:bg-blue-50 shadow-lg"
-                    : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:shadow-lg hover:shadow-blue-500/25 hover:scale-105"
+                    ? "bg-white text-blue-600 active:bg-blue-50 shadow-lg"
+                    : "bg-gradient-to-r from-blue-600 to-cyan-500 text-white active:opacity-90"
                 )}
               >
                 {plan.cta}

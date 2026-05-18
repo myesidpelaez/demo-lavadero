@@ -6,6 +6,10 @@
   --foreground-rgb: 15, 23, 42;
   --background-start-rgb: 248, 250, 252;
   --background-end-rgb: 255, 255, 255;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --safe-right: env(safe-area-inset-right);
 }
 
 .dark {
@@ -14,12 +18,20 @@
   --background-end-rgb: 15, 23, 42;
 }
 
-* {
+/* ─── Base resets ─────────────────────────────────── */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
+/* Prevent iOS text size adjustment on orientation change */
 html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Prevent horizontal overflow globally */
+  overflow-x: hidden;
 }
 
 body {
@@ -31,8 +43,58 @@ body {
   );
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   min-height: 100vh;
+  min-height: 100dvh; /* dynamic viewport height — fixes iOS browser chrome */
+  overflow-x: hidden;
+  /* Remove ugly blue flash on tap (Android Chrome) */
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* ─── Touch & interaction ─────────────────────────── */
+button,
+a,
+[role="button"] {
+  /* Remove tap highlight everywhere */
+  -webkit-tap-highlight-color: transparent;
+  /* Ensure minimum touch target size (44px Apple HIG / 48dp Material) */
+  touch-action: manipulation;
+}
+
+/* ─── iOS input zoom prevention ──────────────────── */
+/* iOS Safari zooms in when input font-size < 16px    */
+input,
+select,
+textarea {
+  font-size: 16px !important;
+  /* Remove iOS default input styling */
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Fix iOS date input arrow */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 48px;
+}
+
+/* ─── Safe area padding helpers ──────────────────── */
+/* Use on fixed elements near edges (notch / home bar) */
+.safe-top {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.pb-safe {
+  padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+}
+
+/* ─── Smooth momentum scrolling on iOS ───────────── */
+.scroll-smooth-ios {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── Utilities ───────────────────────────────────── */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -43,7 +105,13 @@ body {
   .glass {
     @apply backdrop-blur-md bg-white/70 dark:bg-slate-900/70 border border-white/20 dark:border-slate-700/50;
   }
+  /* card-hover: disable transform on touch devices to avoid sticky hover states */
   .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-xl;
+    @apply transition-all duration-300;
+  }
+  @media (hover: hover) {
+    .card-hover {
+      @apply hover:-translate-y-1 hover:shadow-xl;
+    }
   }
 }
